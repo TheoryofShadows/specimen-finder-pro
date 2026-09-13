@@ -1,0 +1,35 @@
+{
+  "name": "specimen-finder-pro",
+  "version": "1.0.0",
+  "description": "Hosted Pro upgrade for Specimen Finder — saved GBIF specimen searches, private notes, and CSV/JSON export",
+  "main": "src/server.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "keywords": [
+    "gbif",
+    "botany",
+    "herbarium",
+    "specimens"
+  ],
+  "author": "TheoryofShadows",
+  "license": "ISC",
+  "engines": {
+    "node": ">=18"
+  },
+  "type": "commonjs",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "better-sqlite3": "^11.7.0",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "stripe": "^22.6.2"
+  }
+}

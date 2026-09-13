@@ -1,0 +1,112 @@
+:root {
+  --bg: #12170f;
+  --panel: #1c2418;
+  --text: #e8efe0;
+  --muted: #9aab90;
+  --accent: #c6d36e;
+  --accent-dim: #7d8a3a;
+  --danger: #e07a6a;
+  --border: #2d3826;
+  --ink: #0c1009;
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, "Times New Roman", serif;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background:
+    radial-gradient(900px 480px at 8% -8%, #2a3a1c 0%, transparent 55%),
+    radial-gradient(700px 400px at 100% 0%, #24301c 0%, transparent 40%),
+    var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.55;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  background: rgba(12, 16, 9, 0.45);
+}
+.logo { font-weight: 700; color: var(--text); letter-spacing: 0.01em; font-size: 1.1rem; }
+nav a, nav .linkish { margin-left: 1rem; color: var(--muted); background: none; border: none; cursor: pointer; font: inherit; }
+nav .btn { color: var(--ink); background: var(--accent); padding: 0.4rem 0.8rem; border-radius: 6px; }
+main { max-width: 920px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+footer { text-align: center; color: var(--muted); font-size: 0.85rem; padding: 2rem 1rem 3rem; border-top: 1px solid var(--border); }
+.eyebrow { text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.75rem; color: var(--accent); margin: 0 0 0.5rem; }
+.hero h1 { font-size: clamp(2rem, 5vw, 2.9rem); margin: 0 0 0.75rem; letter-spacing: -0.02em; }
+.hero p.lead { color: var(--muted); font-size: 1.12rem; max-width: 38rem; }
+.cta { display: flex; gap: 0.75rem; flex-wrap: wrap; margin: 1.5rem 0 2.5rem; }
+.btn, button.primary {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--ink);
+  border: none;
+  border-radius: 8px;
+  padding: 0.65rem 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  font-family: inherit;
+}
+.btn.secondary, a.secondary {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+.btn:hover, button.primary:hover { background: #d6e184; text-decoration: none; }
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem 1.4rem;
+  margin: 1rem 0;
+}
+.grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.muted { color: var(--muted); }
+.ok { color: var(--accent); }
+.flash { background: #24301c; border-bottom: 1px solid var(--accent-dim); padding: 0.75rem 1.5rem; text-align: center; }
+form.stack label { display: block; margin: 0.75rem 0 0.25rem; color: var(--muted); font-size: 0.9rem; }
+form.stack input, form.stack textarea {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: #12180e;
+  color: var(--text);
+  font: inherit;
+}
+form.stack textarea { resize: vertical; min-height: 4.5rem; }
+form.stack button { margin-top: 1rem; }
+form.stack.tight { margin: 0; }
+form.stack.tight input { margin-bottom: 0.35rem; }
+form.stack.tight button {
+  margin-top: 0;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  border-radius: 6px;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+}
+table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+th, td { text-align: left; padding: 0.6rem 0.4rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+th { color: var(--muted); font-weight: 500; font-size: 0.85rem; }
+.row-actions form { display: inline; }
+.row-actions button {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  border-radius: 6px;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  font: inherit;
+}
+.row-actions button:hover { color: var(--danger); border-color: var(--danger); }
+.pricing { padding-left: 1.1rem; }
+.pricing li { margin: 0.35rem 0; }
+.error { color: var(--danger); margin: 0.5rem 0; }
