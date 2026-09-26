@@ -16,10 +16,12 @@ const { pullForQuery, toCsv, referenceLinks } = require('./gbif');
 
 const FREE_TOOL = 'https://theoryofshadows.github.io/specimen-finder/';
 const FREE_REPO = 'https://github.com/TheoryofShadows/specimen-finder';
-const PRO_LOOKUP = 'specimen-finder-pro';
-const PRO_CENTS = 400;
+const PRO_LOOKUP = 'specimen-finder-pro-5';
+const PRO_CENTS = 500;
+const PRO_PRICE_ID = 'price_1UJkAdCJ8WGcNSoKx85XbRQq';
 
 async function resolveProPrice(stripe) {
+  if (PRO_PRICE_ID) return PRO_PRICE_ID;
   try {
     const listed = await stripe.prices.list({ lookup_keys: [PRO_LOOKUP], active: true, limit: 1 });
     const hit = (listed.data || []).find((p) => p.unit_amount === PRO_CENTS);
@@ -112,7 +114,7 @@ function createRouter(db, stripe) {
     if (req.user) return res.redirect('/dashboard');
     const body = `
       <section class="hero">
-        <p class="eyebrow">Hosted upgrade · $4/mo</p>
+        <p class="eyebrow">Hosted upgrade · $5/mo</p>
         <h1>Keep specimen work in one place.</h1>
         <p class="lead">The free browser tool stays free. Pro is a hosted account for saved GBIF pulls, private notes, and CSV/JSON export — not photo ID, not a data store you can resell.</p>
         <div class="cta">
@@ -134,7 +136,7 @@ function createRouter(db, stripe) {
         </div>
         <div class="card">
           <h3>Pro</h3>
-          <p class="muted">$4 / month</p>
+          <p class="muted">$5 / month</p>
           <ul class="pricing">
             <li>Unlimited saved searches</li>
             <li>CSV + JSON export of last fetch</li>
@@ -237,7 +239,7 @@ function createRouter(db, stripe) {
         ? `<div class="card"><p class="ok">Plan: <strong>Pro</strong> (${searches.length} saved searches, unlimited)</p></div>`
         : `<div class="card">
             <p>Plan: <strong>Free</strong> (${searches.length}/${limitLabel} saved searches). Pro unlocks unlimited searches, batch lists, and CSV/JSON export.</p>
-            <form method="post" action="/billing/checkout"><button class="primary" type="submit">Upgrade to Pro — $4/mo</button></form>
+            <form method="post" action="/billing/checkout"><button class="primary" type="submit">Upgrade to Pro — $5/mo</button></form>
             <p class="muted">Stripe Checkout. The free open tool is unchanged.</p>
           </div>`;
 
@@ -434,7 +436,7 @@ function createRouter(db, stripe) {
             <a class="btn secondary" href="/searches/${escapeHtml(search.id)}/export.json">Download JSON</a>
           </p>`
         : '<p class="muted">Export unlocks after a successful fetch.</p>'
-      : `<p class="muted">CSV/JSON export is a Pro feature. <form method="post" action="/billing/checkout" style="display:inline"><button class="primary" type="submit">Upgrade — $4/mo</button></form></p>`;
+      : `<p class="muted">CSV/JSON export is a Pro feature. <form method="post" action="/billing/checkout" style="display:inline"><button class="primary" type="submit">Upgrade — $5/mo</button></form></p>`;
 
     const body = `
       <p class="muted"><a href="/dashboard">← Dashboard</a></p>
