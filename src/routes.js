@@ -104,7 +104,7 @@ function insertSearch(db, user, query, notes) {
 
 function createRouter(db, stripe) {
   const router = express.Router();
-  const APP_URL = (process.env.APP_URL || 'http://localhost:3000').replace(/\/$/, '');
+  const APP_URL = (process.env.APP_URL || 'http://localhost:3000').replace(/\/+$/, '');
 
   router.get('/health', (_req, res) => {
     res.json({ ok: true, service: 'specimen-finder-pro' });
@@ -628,6 +628,7 @@ function createRouter(db, stripe) {
         cancel_url: `${APP_URL}/dashboard`,
         metadata: { user_id: req.user.id },
         subscription_data: { metadata: { user_id: req.user.id } },
+        branding_settings: { display_name: 'Specimen Finder Pro' },
       });
       res.redirect(303, session.url);
     } catch (err) {

@@ -11,6 +11,26 @@ const { createRouter, createWebhookHandler } = require('./routes');
 
 const PORT = Number(process.env.PORT || 3000);
 
+function securityHeaders(_req, res, next) {
+  res.setHeader('Strict-Transport-Security', 'max-age=31536000');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Content-Security-Policy', [
+    "default-src 'self'",
+    "base-uri 'self'",
+    "object-src 'none'",
+    "frame-ancestors 'none'",
+    "form-action 'self'",
+    "img-src 'self' data: https:",
+    "script-src 'self' 'unsafe-inline'",
+    "style-src 'self' 'unsafe-inline'",
+    "font-src 'self'",
+    "connect-src 'self'",
+  ].join('; '));
+  next();
+}
+
 function createApp(options = {}) {
   const db = options.db || openDb(options.dbPath);
   let stripe = null;
@@ -20,6 +40,7 @@ function createApp(options = {}) {
   }
 
   const app = express();
+  app.use(securityHeaders);
 
   app.post(
     '/webhooks/stripe',
