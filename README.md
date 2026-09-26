@@ -1,6 +1,6 @@
 # Specimen Finder Pro
 
-Hosted **$7/month** upgrade for [Specimen Finder](https://theoryofshadows.github.io/specimen-finder/) — saved GBIF specimen searches, private notes, and CSV/JSON export.
+Hosted **$4/month** upgrade for [Specimen Finder](https://theoryofshadows.github.io/specimen-finder/) — saved GBIF specimen searches, private notes, and CSV/JSON export.
 
 The free open tool stays free and unpaywalled:
 
@@ -25,7 +25,7 @@ This repo is the **hosted workflow** only. Paid features are accounts, saved sea
 - Pro: unlimited searches, batch species list, CSV + JSON export
 - Server-side GBIF species match + preserved-specimen pull (User-Agent, ~1 req/s throttle, attribution)
 - Private notes per search and per GBIF record
-- Stripe Checkout for Pro ($7/mo) + webhook to unlock / revoke Pro
+- Stripe Checkout for Pro ($4/mo) + webhook to unlock / revoke Pro
 - `GET /health` → `{"ok":true,"service":"specimen-finder-pro"}`
 
 ## Requirements
@@ -57,7 +57,7 @@ npm test
 | `JWT_SECRET` | yes | Long random string for signing auth cookies |
 | `DB_PATH` | recommended | Absolute SQLite path on a volume (`/data/specimen-finder-pro.db`) |
 | `STRIPE_SECRET_KEY` | for Pro | Stripe secret key |
-| `STRIPE_PRICE_PRO` | for Pro | Price ID for the $7/mo subscription |
+| `STRIPE_PRICE_PRO` | fallback | Used only if lookup key `specimen-finder-pro` ($4/mo) is missing |
 | `STRIPE_WEBHOOK_SECRET` | for Pro | Webhook signing secret |
 | `NODE_ENV` | no | Set `production` on Railway |
 
@@ -67,7 +67,7 @@ If you are not creating prices via API:
 
 1. Open [Stripe Dashboard → Products](https://dashboard.stripe.com/products).
 2. **Add product** → name `Specimen Finder Pro`.
-3. Pricing: **Recurring**, **$7.00 USD / month**.
+3. Pricing: **Recurring**, **$4.00 USD / month**. Lookup key `specimen-finder-pro` (already live). `STRIPE_PRICE_PRO` is only a fallback.
 4. Save and copy the **Price ID** (`price_...`) into `STRIPE_PRICE_PRO`.
 5. Developers → **Webhooks** → Add endpoint:
    - URL: `https://YOUR_APP_URL/webhooks/stripe`

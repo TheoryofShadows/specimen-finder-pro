@@ -52,7 +52,7 @@ describe('Specimen Finder Pro smoke', () => {
     const html = await res.text();
     assert.match(html, /Specimen Finder Pro/);
     assert.match(html, /theoryofshadows\.github\.io\/specimen-finder/);
-    assert.match(html, /\$7/);
+    assert.match(html, /\$4/);
     assert.match(html, /Start free/);
     assert.doesNotMatch(html, /Pl@ntNet/);
     assert.match(html, /does not include photo identification/);

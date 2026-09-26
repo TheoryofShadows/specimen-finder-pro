@@ -16,6 +16,19 @@ const { pullForQuery, toCsv, referenceLinks } = require('./gbif');
 
 const FREE_TOOL = 'https://theoryofshadows.github.io/specimen-finder/';
 const FREE_REPO = 'https://github.com/TheoryofShadows/specimen-finder';
+const PRO_LOOKUP = 'specimen-finder-pro';
+const PRO_CENTS = 400;
+
+async function resolveProPrice(stripe) {
+  try {
+    const listed = await stripe.prices.list({ lookup_keys: [PRO_LOOKUP], active: true, limit: 1 });
+    const hit = (listed.data || []).find((p) => p.unit_amount === PRO_CENTS);
+    if (hit) return hit.id;
+  } catch (err) {
+    console.error('[stripe price lookup]', err.message);
+  }
+  return process.env.STRIPE_PRICE_PRO || '';
+}
 
 function wantsJson(req) {
   return req.path.startsWith('/api') || req.accepts(['json', 'html']) === 'json';
@@ -99,7 +112,7 @@ function createRouter(db, stripe) {
     if (req.user) return res.redirect('/dashboard');
     const body = `
       <section class="hero">
-        <p class="eyebrow">Hosted upgrade · $7/mo</p>
+        <p class="eyebrow">Hosted upgrade · $4/mo</p>
         <h1>Keep specimen work in one place.</h1>
         <p class="lead">The free browser tool stays free. Pro is a hosted account for saved GBIF pulls, private notes, and CSV/JSON export — not photo ID, not a data store you can resell.</p>
         <div class="cta">
@@ -121,7 +134,7 @@ function createRouter(db, stripe) {
         </div>
         <div class="card">
           <h3>Pro</h3>
-          <p class="muted">$7 / month</p>
+          <p class="muted">$4 / month</p>
           <ul class="pricing">
             <li>Unlimited saved searches</li>
             <li>CSV + JSON export of last fetch</li>
@@ -224,7 +237,7 @@ function createRouter(db, stripe) {
         ? `<div class="card"><p class="ok">Plan: <strong>Pro</strong> (${searches.length} saved searches, unlimited)</p></div>`
         : `<div class="card">
             <p>Plan: <strong>Free</strong> (${searches.length}/${limitLabel} saved searches). Pro unlocks unlimited searches, batch lists, and CSV/JSON export.</p>
-            <form method="post" action="/billing/checkout"><button class="primary" type="submit">Upgrade to Pro — $7/mo</button></form>
+            <form method="post" action="/billing/checkout"><button class="primary" type="submit">Upgrade to Pro — $4/mo</button></form>
             <p class="muted">Stripe Checkout. The free open tool is unchanged.</p>
           </div>`;
 
@@ -421,7 +434,7 @@ function createRouter(db, stripe) {
             <a class="btn secondary" href="/searches/${escapeHtml(search.id)}/export.json">Download JSON</a>
           </p>`
         : '<p class="muted">Export unlocks after a successful fetch.</p>'
-      : `<p class="muted">CSV/JSON export is a Pro feature. <form method="post" action="/billing/checkout" style="display:inline"><button class="primary" type="submit">Upgrade — $7/mo</button></form></p>`;
+      : `<p class="muted">CSV/JSON export is a Pro feature. <form method="post" action="/billing/checkout" style="display:inline"><button class="primary" type="submit">Upgrade — $4/mo</button></form></p>`;
 
     const body = `
       <p class="muted"><a href="/dashboard">← Dashboard</a></p>
@@ -582,7 +595,8 @@ function createRouter(db, stripe) {
   router.get('/searches/:id/export.json', requireAuth, (req, res) => sendExport(req, res, 'json'));
 
   router.post('/billing/checkout', requireAuth, async (req, res) => {
-    if (!stripe || !process.env.STRIPE_PRICE_PRO) {
+    const price = stripe ? await resolveProPrice(stripe) : '';
+    if (!stripe || !price) {
       return res.status(503).type('html').send(
         layout({
           title: 'Billing unavailable',
@@ -607,7 +621,7 @@ function createRouter(db, stripe) {
       const session = await stripe.checkout.sessions.create({
         mode: 'subscription',
         customer: customerId,
-        line_items: [{ price: process.env.STRIPE_PRICE_PRO, quantity: 1 }],
+        line_items: [{ price, quantity: 1 }],
         success_url: `${APP_URL}/dashboard?upgraded=1`,
         cancel_url: `${APP_URL}/dashboard`,
         metadata: { user_id: req.user.id },
