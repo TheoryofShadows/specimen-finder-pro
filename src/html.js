@@ -35,6 +35,7 @@ function layout({ title, user, body, flash }) {
     <p>Occurrence data via <a href="https://www.gbif.org/">GBIF</a>. Context links: Wikipedia, Wikidata, POWO. We do not sell or redistribute publisher content.</p>
     <p><a href="https://github.com/TheoryofShadows/specimen-finder-pro">Source on GitHub</a></p>
   </footer>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "10fce122ecb8482eb60f27d6e88cf932"}'></script>
 </body>
 </html>`;
 }
