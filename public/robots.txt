@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /dashboard
+Disallow: /api/
+Disallow: /billing/
+Disallow: /webhooks/
+Sitemap: https://specimen-finder-pro-production.up.railway.app/sitemap.xml
