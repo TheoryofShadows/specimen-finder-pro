@@ -21,6 +21,13 @@ function layout({ title, user, body, flash }) {
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>${escapeHtml(title)} · Specimen Finder Pro</title>
+  <meta name="description" content="Find museum and herbarium specimen records fast, with saved searches and CSV/JSON export." />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Specimen Finder Pro" />
+  <meta property="og:title" content="${escapeHtml(title)} · Specimen Finder Pro" />
+  <meta property="og:description" content="Find museum and herbarium specimen records fast, with saved searches and CSV/JSON export." />
+  <meta name="twitter:card" content="summary" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
